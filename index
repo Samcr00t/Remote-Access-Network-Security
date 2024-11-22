@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Recognition</title>
+</head>
+<body>
+    <h1>Device Recognition</h1>
+    <div id="output"></div>
+    <div id="input"></div>
+    
+    <script>
+        // WebSocket ile sunucuya bağlan
+        const socket = new WebSocket('ws://<PUBLIC_IP_ADDRESS:8765');
+
+        // Sunucu ile bağlantı açıldığında
+        socket.onopen = () => {
+            console.log('Connected to server');
+        };
+
+        // Sunucudan gelen mesajları işleme
+        socket.onmessage = (event) => {
+            const message = event.data;
+            console.log('Received:', message);
+
+            // Mesajları ekranda göster
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = message;
+
+            // Kullanıcıdan input almak için yeni bir alan yarat
+            const inputDiv = document.getElementById('input');
+            inputDiv.innerHTML = `
+                <label>Enter your choice (1 to accept, 2 to ignore):</label>
+                <input type="text" id="userInput" />
+                <button onclick="sendChoice()">Send</button>
+            `;
+
+            // Kullanıcı inputunu logla
+            console.log("Input field created");
+        };
+
+        // Kullanıcının cevabını sunucuya gönder
+        function sendChoice() {
+            const userInput = document.getElementById('userInput').value;
+            if (userInput === '1' || userInput === '2') {
+                socket.send(userInput);  // Kullanıcının cevabını sunucuya gönder
+                console.log('Sent:', userInput);
+            } else {
+                alert('Please enter 1 or 2.');
+            }
+        }
+
+        // Bağlantı kapandığında
+        socket.onclose = () => {
+            console.log('Disconnected from server');
+        };
+    </script>
+</body>
+</html>

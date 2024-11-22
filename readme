@@ -1,0 +1,42 @@
+Remote Access Network Security (RANS)
+
+This project provides a simple client-server solution for network security and device identification. It allows you to scan your home network from an external network, without being on the local network itself, and see if any new devices have connected to your network.
+
+Project Components
+server.py: Python code running on the server side. It communicates with clients and processes incoming data.
+index.html: The user interface. Users can enter their external IP address to connect to the server.
+Installation
+Run the server.py file:
+
+python server.py
+This command will start your local server and clients will be able to connect.
+
+Download the index.html file and open it in a browser.
+
+You will need to enter your external IP address: After opening the index.html file, you will need to write your external IP address in the place specified in the file.
+Changing the External IP Address
+When you open the index.html file, you may need to change the IP address used to connect to the WebSocket server. Find the following line in the file:
+
+const socket = new WebSocket('ws://PUBLIC_IP_ADDRESS:8765');  // Replace with your external IP address
+Replace PUBLIC_IP_ADDRESS with your own external IP address. The IP address must be correct, otherwise, the client will not be able to connect to the server.
+
+How to Find Your External IP Address
+If you don't know your external IP address, you can find it by following these steps:
+
+Use websites like WhatIsMyIP to find your external IP address.
+Alternatively, you can find it by running the curl ifconfig.me command in your terminal or command prompt.
+Usage
+Initial Setup and IP Management
+When you first run server.py, all the IP addresses on your network will be scanned, and actions will be performed for each one. The server will send data to each device on your network to identify them.
+
+If you recognize an IP address and want it to stay connected, make sure you do not ignore it. Once you define an IP, no further data will be collected from it, allowing you to monitor only the newly connected devices.
+If you don't want to recognize a device, you can ignore it. In this case, the client will ignore the device, and the server will continue monitoring only new devices.
+Modem and Port Settings
+Port Forwarding: You will need to set up port forwarding in your modem’s interface. This setting ensures that requests coming from external networks are forwarded to the correct internal device. Make sure to forward port 8765 to your local IP address in the modem’s interface.
+
+Lease Time Setting: You will also need to configure the lease time setting in your modem’s interface. This setting determines how long IP addresses are leased to devices. By setting this, you ensure that the IP addresses of devices that are not foreign do not change, preventing the need to recognize new IPs repeatedly. Without this configuration, the IP addresses of devices may change, which could lead to errors.
+
+Security Notes
+No Encryption: There is no encryption in this connection. Therefore, for security purposes, you should consider adding encryption. You can research and implement secure communication protocols such as TLS/SSL for this purpose.
+
+Additional Security Measures: You can also consider adding more advanced security features and integrating them into the project.
